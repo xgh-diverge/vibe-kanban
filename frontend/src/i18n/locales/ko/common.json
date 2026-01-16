@@ -165,7 +165,8 @@
     "workingBranch": "작업 브랜치",
     "recent": "최근",
     "other": "기타",
-    "devServerPreview": "개발 서버 미리보기"
+    "devServerPreview": "개발 서버 미리보기",
+    "terminal": "터미널"
   },
   "repos": {
     "loading": "저장소 로딩 중...",
@@ -279,5 +280,11 @@
   "search": {
     "matchCount": "{{current}} / {{total}}",
     "noMatches": "일치 항목 없음"
+  },
+  "contextUsage": {
+    "label": "컨텍스트 사용량",
+    "emptyTooltip": "컨텍스트 사용량은 다음 응답 후에 표시됩니다",
+    "tooltip": "컨텍스트: {{percentage}}% · {{used}} / {{total}} 토큰",
+    "ariaLabel": "컨텍스트 사용량: {{percentage}}%"
   }
 }
