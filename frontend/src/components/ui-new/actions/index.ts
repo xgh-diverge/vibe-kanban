@@ -243,10 +243,12 @@ export const Actions = {
     requiresTarget: true,
     execute: async (ctx, workspaceId) => {
       try {
-        const [firstMessage, repos] = await Promise.all([
+        const [workspace, firstMessage, repos] = await Promise.all([
+          getWorkspace(ctx.queryClient, workspaceId),
           attemptsApi.getFirstUserMessage(workspaceId),
           attemptsApi.getRepos(workspaceId),
         ]);
+        const task = await tasksApi.getById(workspace.task_id);
         ctx.navigate('/workspaces/create', {
           state: {
             initialPrompt: firstMessage,
@@ -254,6 +256,7 @@ export const Actions = {
               repo_id: r.id,
               target_branch: r.target_branch,
             })),
+            project_id: task.project_id,
           },
         });
       } catch {
@@ -390,12 +393,14 @@ export const Actions = {
           getWorkspace(ctx.queryClient, workspaceId),
           attemptsApi.getRepos(workspaceId),
         ]);
+        const task = await tasksApi.getById(workspace.task_id);
         ctx.navigate('/workspaces/create', {
           state: {
             preferredRepos: repos.map((r) => ({
               repo_id: r.id,
               target_branch: workspace.branch,
             })),
+            project_id: task.project_id,
           },
         });
       } catch {
@@ -722,9 +727,9 @@ export const Actions = {
     },
   },
 
-  CopyPath: {
-    id: 'copy-path',
-    label: 'Copy path',
+  CopyWorkspacePath: {
+    id: 'copy-workspace-path',
+    label: 'Copy Workspace Path',
     icon: 'copy-icon' as const,
     shortcut: 'Y P',
     requiresTarget: false,
@@ -1139,7 +1144,7 @@ export type ContextBarItem = ActionDefinition | typeof ContextBarDivider;
 
 // ContextBar action groups define which actions appear in each section
 export const ContextBarActionGroups = {
-  primary: [Actions.OpenInIDE, Actions.CopyPath] as ActionDefinition[],
+  primary: [Actions.OpenInIDE, Actions.CopyWorkspacePath] as ActionDefinition[],
   secondary: [
     Actions.ToggleDevServer,
     Actions.TogglePreviewMode,
